@@ -2,7 +2,7 @@ name: Daily Report
 
 on:
   schedule:
-    - cron: '30 9 * * *'  # 매일 18:30 (KST 기준, UTC로는 9:30)
+    - cron: '28 9 * * *'  # 매일 18:30 (KST 기준, UTC로는 9:30)
 
 jobs:
   run_daily_report:
