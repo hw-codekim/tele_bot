@@ -1,0 +1,29 @@
+name: Daily Report
+
+on:
+  schedule:
+    - cron: '30 9 * * *'  # 매일 18:30 (KST 기준, UTC로는 9:30)
+
+jobs:
+  run_daily_report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run bot script
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}  # GitHub Secrets에서 BOT_TOKEN 값을 불러옵니다
+          CHAT_ID: ${{ secrets.CHAT_ID }}      # GitHub Secrets에서 CHAT_ID 값을 불러옵니다
+        run: |
+          python main.py  # 실제 실행하고 싶은 Python 스크립트
