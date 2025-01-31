@@ -169,3 +169,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+# 가상환경 폴더 제외
+televenv/
+# bot 관련 민감한 파일 제외
+bot_key.json
+bot api key.txt
