@@ -10,7 +10,7 @@ import json
 
 with open('bot_key.json', 'r') as file:
     data = json.load(file)
-    
+
 BOT_TOKEN = data['BOT_TOKEN']
 CHAT_ID = data['CHAT_ID']
 
@@ -41,6 +41,7 @@ async def send_news_via_telegram(news_list):
     for news in news_list:
         await bot.send_message(chat_id=CHAT_ID, text=news)
 
+#=============== 레포트 상향 =====================
 async def send_report_telegram(report):
     all_reports = ""
     for entry in report:
@@ -70,7 +71,12 @@ async def send_report_telegram(report):
     if all_reports:
         await bot.send_message(chat_id=CHAT_ID, text=all_reports)
 
-    # await bot.send_message(chat_id=CHAT_ID, text=all_reports)
+#=============== 주요종목과 지수YTD =====================
+
+
+
+
+
 
 # 메인 함수
 async def main():
