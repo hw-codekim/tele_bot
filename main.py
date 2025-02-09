@@ -55,7 +55,7 @@ async def send_report_telegram(report):
             f"*내용 : {entry['내용']}\n" +
             "-" * 50 + "\n"
         )
-     # 메시지가 4096자를 초과하면 분할하여 전송
+    # 메시지가 4096자를 초과하면 분할하여 전송
     max_length = 4096
     while len(all_reports) > max_length:
         # 4096자를 넘어가는 시점에서 마지막 '\n'을 기준으로 메시지를 나눠보자
