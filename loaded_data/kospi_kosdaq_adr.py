@@ -1,13 +1,15 @@
+
+import pandas as pd
 import requests
 from io import BytesIO
 import pandas as pd
 import numpy as np
-import time
-from biz_day import Bizday
+import parmap
+# from ..biz_day import Bizday
 
-
-class Krx_daily_price:
-    def daily_price(biz_day):
+# 그냥 발생한 
+class Daily_stockprice: 
+    def get_kospi_kosdaq(biz_day):
         gen_otp_url = 'http://data.krx.co.kr/comm/fileDn/GenerateOTP/generate.cmd'
         gen_otp = {
             'locale': 'ko_KR',
@@ -40,27 +42,45 @@ class Krx_daily_price:
                         (daily_updown['시장구분'] != 'KONEX') &
                         (~daily_updown['종목명'].str.endswith('우')) &
                         (~daily_updown['종목명'].str.endswith('우B')) &
+                        (~daily_updown['소속부'].str.contains('전환', na=False)) &
                         (~daily_updown['소속부'].str.contains('리츠', na=False)) &
                         (~daily_updown['소속부'].str.contains('SPAC', na=False)) &
                         (~daily_updown['소속부'].str.contains('관리', na=False))
                         ]
-        daily_updown = daily_updown[['기준일','종목코드','종목명','종가','시가총액']]
-        print(f'[{biz_day}] 종목 {len(daily_updown)}개 로딩 성공')
-        time.sleep(1)
-        return daily_updown
+        daily_updown = daily_updown[['기준일','등락률']]
+        daily_updown.set_index(['기준일'],inplace=True)
+        daily_updown['등락률'] = daily_updown['등락률'].astype(float)
+        print(daily_updown)
+        result = []
+        for date,changes in daily_updown.iterrows():
+            print(date)
+            print('===============')
+            print(changes)
+            up, down, flat = 0, 0, 0  # 상승, 하락, 보합 개수 초기화
+
+            for symbol,val in changes.items():
+                if val > 0 :
+                    up += 1
+                elif val < 0 :
+                    down += 1
+                else:
+                    flat += 1
+                result.append([up,down,flat])
+        result_df = pd.DataFrame(result, columns=['날짜','상승','하락','유지'])
+        result_df.set_index('날짜',inplace=True)
+        result_df['합합'] = result_df['상승'].sum()
+        print(result_df)
+        result_df['상승MA20'] = result_df['상승'].rolling(window=20).sum()
+        result_df['하락MA20'] = result_df['하락'].rolling(window=20).sum()
+
+        result_df['ADR'] = round(result_df['상승MA20']/result_df['하락MA20']*100,1)
+        print(result_df)
+        return result_df
 
 if __name__ == '__main__':
-    start_day = '20241230'
-    end_day = Bizday.biz_day()
-
-    start_day_df = Krx_daily_price.daily_price(start_day)
-    end_day_df = Krx_daily_price.daily_price(end_day)
-    df = pd.concat([start_day_df,end_day_df],axis=0)
-    df = df.sort_values(by=['종목명','기준일'],ascending=True)
-    df['1230일종가'] = df.groupby('종목명')['종가'].shift(1)
-    df['YTD'] = round(df.groupby('종목명')['종가'].diff(1)/df.groupby('종목명')['종가'].shift(0) * 100,1)
-    df['YTD'].dropna(inplace=True)
-    df = df.sort_values(by = 'YTD',ascending=False)
-    df = df[df['시가총액'] > 700]
-    df = df.head(50)
-    df.to_clipboard()
+    # day = Bizday.biz_day()
+    day = '20250207'
+    days = Daily_stockprice.get_kospi_kosdaq(day)
+    results = parmap.map(Daily_stockprice.get_kospi_kosdaq, days, pm_processes=4, pm_pbar=True) # 
+    new_data = pd.concat(results, ignore_index=True)
+    print(new_data)
