@@ -44,11 +44,7 @@ class Krx_daily_price:
                         (~daily_updown['소속부'].str.contains('SPAC', na=False)) &
                         (~daily_updown['소속부'].str.contains('관리', na=False))
                         ]
-<<<<<<< HEAD
-        daily_updown = daily_updown[['기준일','종목코드','종목명','시가총액','종가']]
-=======
-        daily_updown = daily_updown[['기준일','종목코드','종목명','종가','시가총액']]
->>>>>>> 1175b7cb88aa8683d71ddfc9de93c2aceacd47bd
+        daily_updown = daily_updown[['기준일','종목코드','종목명','시가총액','종가','등락률']]
         print(f'[{biz_day}] 종목 {len(daily_updown)}개 로딩 성공')
         time.sleep(1)
         return daily_updown
@@ -72,28 +68,27 @@ if __name__ == '__main__':
     start_day = '20241230'
     end_day = Bizday.biz_day()
 
-<<<<<<< HEAD
     # 원하는 종목 리스트
-    # mypick_stock = ['HD현대마린솔루션', 'TYM','산일전기','슈어소프트테크','하이브','한화비전','SAMG엔터',
-    # '레뷰코퍼레이션','쏠리드','엠로','에스피소프트','글로벌텍스프리','리메드','세경하이테크','쓰리빌리언','선익시스템']
-    mypick_stock = ['SG']
+    mypick_stock = ['HD현대마린솔루션', 'TYM','산일전기','슈어소프트테크','하이브','한화비전','SAMG엔터','JYP Ent.','SG','브이티',
+                    '레뷰코퍼레이션','쏠리드','엠로','에스피소프트','글로벌텍스프리','리메드','세경하이테크','쓰리빌리언','선익시스템']
+    # mypick_stock = ['SG']
     # 매주 금요일 기준일 생성
     week_end_dates = pd.date_range(start=start_day, end=end_day, freq='W-FRI').strftime('%Y%m%d')
 
     # 각 주차별 데이터 저장
     weekly_data = []
-
     for week_end in week_end_dates:
         df_week = Krx_daily_price.daily_price(week_end)
         df_week['기준일'] = week_end  # 기준일 컬럼 추가
         weekly_data.append(df_week)
-
+    today_data = Krx_daily_price.daily_price(end_day)
+    weekly_data.append(today_data)
     # 데이터프레임 결합
     df = pd.concat(weekly_data, axis=0)
 
     # 원하는 종목만 필터링
     df = df[df['종목명'].isin(mypick_stock)]
-
+    print(df)
     # 정렬
     df = df.sort_values(by=['종목명', '기준일'], ascending=True)
 
@@ -131,16 +126,4 @@ if __name__ == '__main__':
 
     # 출력 확인
     print(df_pivot)
-=======
-    start_day_df = Krx_daily_price.daily_price(start_day)
-    end_day_df = Krx_daily_price.daily_price(end_day)
-    df = pd.concat([start_day_df,end_day_df],axis=0)
-    df = df.sort_values(by=['종목명','기준일'],ascending=True)
-    df['1230일종가'] = df.groupby('종목명')['종가'].shift(1)
-    df['YTD'] = round(df.groupby('종목명')['종가'].diff(1)/df.groupby('종목명')['종가'].shift(0) * 100,1)
-    df['YTD'].dropna(inplace=True)
-    df = df.sort_values(by = 'YTD',ascending=False)
-    df = df[df['시가총액'] > 700]
-    df = df.head(50)
-    df.to_clipboard()
->>>>>>> 1175b7cb88aa8683d71ddfc9de93c2aceacd47bd
+
