@@ -70,8 +70,9 @@ class Max:
         ]
 
         # 📌 오늘 날짜
-        today = datetime.today().strftime('%Y%m%d')
-        biz_days = pd.date_range(start='2024-02-20', end=today, freq=BDay()).strftime('%Y%m%d').tolist()
+        # today = datetime.today().strftime('%Y%m%d')
+        one_year_ago = (datetime.today() - pd.DateOffset(years=1)).strftime('%Y%m%d')
+        biz_days = pd.date_range(start=one_year_ago, end=today, freq=BDay()).strftime('%Y%m%d').tolist()
         krx_holidays_str = [pd.to_datetime(date).strftime('%Y%m%d') for date in krx_holidays]
         biz_days = [day for day in biz_days if day not in krx_holidays_str]
         new_data = pd.DataFrame()
@@ -86,8 +87,12 @@ class Max:
         result = latest_data.merge(high_prices, on='종목명', suffixes=('_현재', '_52주최고'))
 
         result['신고가'] = result['시가총액_현재'] == result['시가총액_52주최고']
+        result['신고가_비율'] = round((result['시가총액_현재'] / result['시가총액_52주최고']) * 100,1)
+        result = result[(result['신고가_비율'] >= 90) & (result['신고가_비율'] <= 100)]
+        result = result[(result['시가총액_52주최고'] > 5000) & (result['시가'] != 0) & ~(result['종목명'].str.contains('리츠'))]  
+        result = result.sort_values(by='신고가_비율',ascending=False)
 
-        return result[result['신고가']]  # 신고가 종목만 반환
+        return result # 신고가 종목만 반환
     
     
     def get_gap(ref_day):
@@ -96,11 +101,12 @@ class Max:
         return result
         
 if __name__ == '__main__':
-    day = '20250220'
-    df = Max.get_52_week_high(day)
-    df.to_csv(f'./saved_data/{day}_52주 신고가.csv', encoding='utf-8-sig',index=False)
-    dd = Max.get_gap(day)
-    dd.to_csv(f'./saved_data/{day}_종목별 등락률.csv', encoding='utf-8-sig', index=False)
+    today = datetime.today().strftime('%Y%m%d')
+    # day = '20250221'
+    df = Max.get_52_week_high(today)
+    df.to_csv(f'./saved_data/{today}_52주 신고가1.csv', encoding='utf-8-sig',index=False)
+    dd = Max.get_gap(today)
+    dd.to_csv(f'./saved_data/{today}_종목별 등락률.csv', encoding='utf-8-sig', index=False)
     # print(df)
     
     

@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
     # 정렬
     df = df.sort_values(by=["종목명", "기준일"], ascending=True)
-    print(df)
+    
     # 주차별 변동률 계산
     df["이전 시가총액"] = df.groupby("종목명")["시가총액"].shift(1)
     df["주차별 변동률"] = round(df.groupby("종목명")["시가총액"].pct_change(1) * 100, 1)
