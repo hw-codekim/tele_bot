@@ -74,6 +74,38 @@ class Report:
             })
         return today_data
     
+    def get_company_report(biz_day,name):
+
+        url = f'https://www.whynotsellreport.com/api/reports/from/20240102/to/{biz_day}'
+        html = rq.get(url)
+        # 필요한 필드만 추출하여 리스트로 만들기
+        data = html.json()
+        
+        extracted_data = []
+        for report in data:
+            extracted_data.append({
+                'id': report['id'],
+                'date': report['date'],
+                'company_name': report['company_name'],
+                'analyst_name': report['analyst_name'],
+                'price': report['price'],
+                'judge': report['judge'],
+                'title': report['title'],
+                'description': report['description'],
+                'analyst_rank': report['analyst_rank'],
+                'stock_code_id': report['stock_code_id'],
+                'analyst_id': report['analyst_id'],
+            })
+
+    # 데이터프레임 생성
+        df = pd.DataFrame(extracted_data)
+        df['date'] = pd.to_datetime(df['date'])
+        df['date'] = df['date'].dt.strftime('%Y%m%d')
+        df = df.rename(columns={'price':'target_price'})
+        df=df[df['company_name'] == name]
+        time.sleep(1)
+        return df
+
     def save(df): # 엑셀 저장
         df = df.sort_values(by=['company_name','date'],ascending=True)
         try:
@@ -88,16 +120,7 @@ class Report:
 
 if __name__ == '__main__':
     day = Bizday.biz_day()
+    name = '글로벌텍스프리'
     df = Report.whynot_report(day)
-    print(df)
-    # 원하는 형식으로 출력
-    # for _, row in df.iterrows():
-    #     print(" " * 50)
-    #     print(f"*기업명: {row['company_name']}")
-    #     print(f"*애널리스트: {row['analyst_name']}")
-    #     print(f"*현재 목표가: {int(row['current_target_price']):,}원")
-    #     print(f"*이전 목표가: {int(row['prevision_target_price']):,}원")
-    #     print(f"*상승률: {row['rate_of_increase']}%")
-    #     print(f"*제목: {row['title']}")
-    #     print(f"*내용: {row['description']}\n")
-    #     print("-" * 50)
+    ddf = Report.get_company_report(day,name)
+    ddf.to_clipboard()
