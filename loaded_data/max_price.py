@@ -89,7 +89,7 @@ class Max:
         result['신고가'] = result['시가총액_현재'] == result['시가총액_52주최고']
         result['신고가_비율'] = round((result['시가총액_현재'] / result['시가총액_52주최고']) * 100,1)
         result = result[(result['신고가_비율'] >= 90) & (result['신고가_비율'] <= 100)]
-        result = result[(result['시가총액_52주최고'] > 5000) & (result['시가'] != 0) & ~(result['종목명'].str.contains('리츠'))]  
+        result = result[(result['시가총액_52주최고'] > 2000) & (result['시가'] != 0) & ~(result['종목명'].str.contains('리츠'))]  
         result = result.sort_values(by='신고가_비율',ascending=False)
 
         return result # 신고가 종목만 반환
@@ -103,8 +103,8 @@ class Max:
 if __name__ == '__main__':
     today = datetime.today().strftime('%Y%m%d')
     # day = '20250221'
-    df = Max.get_52_week_high(today)
-    df.to_csv(f'./saved_data/{today}_52주 신고가1.csv', encoding='utf-8-sig',index=False)
+    # df = Max.get_52_week_high(today)
+    # df.to_csv(f'./saved_data/{today}_52주 신고가1.csv', encoding='utf-8-sig',index=False)
     dd = Max.get_gap(today)
     dd.to_csv(f'./saved_data/{today}_종목별 등락률.csv', encoding='utf-8-sig', index=False)
     # print(df)
