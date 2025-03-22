@@ -145,7 +145,7 @@ def get_price(biz_day):
 if __name__ == '__main__':
     biz_day = datetime.today().strftime('%Y%m%d')
     gubuns = ['1000', '3000', '3100', '6000', '9000', '8000']
-    period = 5
+    period = 20
 
     df = pd.DataFrame()
 
