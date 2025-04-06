@@ -10,6 +10,9 @@ from tqdm import tqdm
 import os
 from openpyxl import load_workbook
 
+
+
+
 class KrxMoney:
     @staticmethod
     def daily_money_flow(biz_day, gubun):
@@ -106,7 +109,7 @@ class KrxMoney:
                 merged_df = merged_df.sort_values(by='등락률',ascending=False)
                 merged_df.to_excel(writer, sheet_name='merge', index=False)
 
-            print("거래대금 엑셀 파일이 저장되었습니다.")
+            print(f"거래대금 엑셀 저장완료!")
         except Exception as e:
             print("엑셀 저장 오류:", e)
 
@@ -145,7 +148,7 @@ def get_price(biz_day):
 if __name__ == '__main__':
     biz_day = datetime.today().strftime('%Y%m%d')
     gubuns = ['1000', '3000', '3100', '6000', '9000', '8000']
-    period = 20
+    period = cnt
 
     df = pd.DataFrame()
 

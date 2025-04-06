@@ -17,11 +17,11 @@ class Report:
 
         today_data = []
 
-        url = f'https://www.whynotsellreport.com/api/reports/from/20240102/to/{biz_day}'
+        url = f'https://www.whynotsellreport.com/api/reports/from/20240301/to/{biz_day}'
         html = rq.get(url)
         # 필요한 필드만 추출하여 리스트로 만들기
         data = html.json()
-        
+        print(data)
         extracted_data = []
         for report in data:
             extracted_data.append({
@@ -76,7 +76,7 @@ class Report:
     
     def get_company_report(biz_day,name):
 
-        url = f'https://www.whynotsellreport.com/api/reports/from/20240102/to/{biz_day}'
+        url = f'https://www.whynotsellreport.com/api/reports/from/20240301/to/{biz_day}'
         html = rq.get(url)
         # 필요한 필드만 추출하여 리스트로 만들기
         data = html.json()
@@ -120,7 +120,7 @@ class Report:
 
 if __name__ == '__main__':
     day = Bizday.biz_day()
-    name = '글로벌텍스프리'
+    name = '펌텍코리아'
     df = Report.whynot_report(day)
     ddf = Report.get_company_report(day,name)
     ddf.to_clipboard()

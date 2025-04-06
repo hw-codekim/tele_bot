@@ -4,7 +4,6 @@ import requests
 from io import BytesIO
 import pandas as pd
 import numpy as np
-
 import parmap
 from pandas.tseries.offsets import BDay
 from datetime import datetime

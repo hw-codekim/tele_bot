@@ -9,6 +9,7 @@ from pandas.tseries.offsets import CustomBusinessDay
 from tqdm import tqdm
 import os
 
+
 class Daily_stock_price:
     def price(biz_day):
         gen_otp_url = 'http://data.krx.co.kr/comm/fileDn/GenerateOTP/generate.cmd'
@@ -52,19 +53,24 @@ class Daily_stock_price:
         return daily_updown
     
     def save(df):
-        filename='./거래대금_엑셀/종목별_가격트렌드.csv'  # 엑셀 저장 함수
+        folder_path = '거래대금_엑셀'
+        os.makedirs(folder_path, exist_ok=True)
+
+        file_path = os.path.join(folder_path, f"거래가격.xlsx")
+
         try:
-            if not os.path.exists(filename):
-                df.to_csv(filename, mode='w', encoding='utf-8-sig', index=False)
+            with pd.ExcelWriter(file_path, engine='openpyxl') as writer:
+                df.to_excel(writer, sheet_name='가격', index=False)
+            
+            print("거래가격 엑셀 저장완료!")
         except Exception as e:
-            print(e)
-        finally:    
-            print(f"{filename} 파일이 저장되었습니다")
+            print("엑셀 저장 오류:", e)
+
 
 
 if __name__ == '__main__':
     biz_day = datetime.today().strftime('%Y%m%d')
-    period = 20
+    period = cnt
 
     df = pd.DataFrame()
 
