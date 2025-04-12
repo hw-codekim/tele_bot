@@ -47,7 +47,7 @@ async def send_report_telegram(report):
         all_reports = ""
         for entry in report:
             all_reports += (
-                f"📌 기업명 : {entry['기업명']}\n" +
+                f"😀 기업명 : {entry['기업명']}\n" +
                 f"*애널리스트 : {entry['애널리스트']}\n" +
                 f"*현재 목표가 : {entry['현재 목표가']}\n" +
                 f"*이전 목표가 : {entry['이전 목표가']}\n" +
