@@ -57,42 +57,32 @@ class Max:
         return daily_updown
 
     def get_52_week_high(ref_day):
-
+        today = ref_day  # ✅ 꼭 필요
         krx_holidays = [
-            '2025-01-01',  # 신정
-            '2025-02-28', '2025-03-01',  # 삼일절 연휴
-            '2025-05-05',  # 어린이날
-            '2025-06-06',  # 현충일
-            '2025-08-15',  # 광복절
-            '2025-09-08', '2025-09-09', '2025-09-10',  # 추석 연휴
-            '2025-10-03',  # 개천절
-            '2025-12-25',  # 성탄절
+            '2025-01-01', '2025-02-28', '2025-03-01', '2025-05-05',
+            '2025-06-06', '2025-08-15', '2025-09-08', '2025-09-09',
+            '2025-09-10', '2025-10-03', '2025-12-25'
         ]
-
-        # 📌 오늘 날짜
-        # today = datetime.today().strftime('%Y%m%d')
-        one_year_ago = (datetime.today() - pd.DateOffset(years=1)).strftime('%Y%m%d')
+        
+        one_year_ago = (pd.to_datetime(ref_day) - pd.DateOffset(years=1)).strftime('%Y%m%d')
         biz_days = pd.date_range(start=one_year_ago, end=today, freq=BDay()).strftime('%Y%m%d').tolist()
         krx_holidays_str = [pd.to_datetime(date).strftime('%Y%m%d') for date in krx_holidays]
         biz_days = [day for day in biz_days if day not in krx_holidays_str]
+        
         new_data = pd.DataFrame()
         for day in tqdm(biz_days, total=len(biz_days)):
             result = Max.get_price(day)
-            new_data = pd.concat([new_data,result])
-
+            new_data = pd.concat([new_data, result])
+        # print(new_data)
         high_prices = new_data.groupby('종목명')['시가총액'].max().reset_index()
+        # print(high_prices)
         latest_data = new_data[new_data['기준일'] == today]
-
-        # 신고가 판별
+        # print(latest_data)
         result = latest_data.merge(high_prices, on='종목명', suffixes=('_현재', '_52주최고'))
+        result['신고가_점수'] = round((result['시가총액_현재'] / result['시가총액_52주최고']) * 100, 1)
+        # print(result)
 
-        result['신고가'] = result['시가총액_현재'] == result['시가총액_52주최고']
-        result['신고가_비율'] = round((result['시가총액_현재'] / result['시가총액_52주최고']) * 100,1)
-        result = result[(result['신고가_비율'] >= 90) & (result['신고가_비율'] <= 100)]
-        result = result[(result['시가총액_52주최고'] > 2000) & (result['시가'] != 0) & ~(result['종목명'].str.contains('리츠'))]  
-        result = result.sort_values(by='신고가_비율',ascending=False)
-
-        return result # 신고가 종목만 반환
+        return result
     
     
     def get_gap(ref_day):
@@ -102,9 +92,9 @@ class Max:
         
 if __name__ == '__main__':
     today = datetime.today().strftime('%Y%m%d')
-    # today = '20250328'
-    # df = Max.get_52_week_high(today)
-    # df.to_csv(f'./saved_data/{today}_52주 신고가1.csv', encoding='utf-8-sig',index=False)
+    # today = '20250411'
+    df = Max.get_52_week_high(today)
+    df.to_csv(f'./saved_data/{today}_52주 신고가.csv', encoding='utf-8-sig',index=False)
     dd = Max.get_gap(today)
     dd.to_csv(f'./saved_data/{today}_종목별 등락률.csv', encoding='utf-8-sig', index=False)
     # print(df)
