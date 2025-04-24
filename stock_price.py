@@ -114,8 +114,8 @@ if __name__ == '__main__':
     
     
     # 금요일 조회시 주석처리 필요 오늘 데이터 추가
-    # today_data = Krx_daily_price.daily_price(end_day)
-    # weekly_data.append(today_data)
+    today_data = Krx_daily_price.daily_price(end_day)
+    weekly_data.append(today_data)
 
     # 데이터프레임 결합
     df = pd.concat(weekly_data, axis=0)
