@@ -7,9 +7,9 @@ import numpy as np
 from datetime import datetime, timedelta
 import time
 from tqdm import tqdm
-import parmap
 from pandas.tseries.offsets import BDay
-
+import holidays
+from pandas.tseries.offsets import CustomBusinessDay
 
 
 #TICK : 상승종목 수 - 하락종목 수 
@@ -82,7 +82,24 @@ class TickTrin:
 
 if __name__ == '__main__':
     today = datetime.today().strftime('%Y%m%d')
-    today = '20250418'
-    df = TickTrin.tick_trin(today)
-    
-    print(df)
+    # today = '20250418'
+
+    # df = TickTrin.tick_trin(today)
+    biz_day = datetime.today().strftime('%Y%m%d')
+    period = 60
+
+    df = pd.DataFrame()
+
+    kr_holidays = holidays.Korea(years=[2024, 2025])
+    holidays_list = list(kr_holidays.keys())
+    kr_business_day = CustomBusinessDay(weekmask="Mon Tue Wed Thu Fri", holidays=holidays_list)
+
+    for i in tqdm(range(period)):
+        start_date = datetime.strptime(biz_day, '%Y%m%d')
+        target_date = (start_date - (i * kr_business_day)).strftime('%Y%m%d')
+        rst_df = TickTrin.tick_trin(target_date)
+        df = pd.concat([df, rst_df])
+    df.dropna(inplace=True)
+    df.sort_values(by='날짜',ascending=True,inplace=True)
+    df['TRIN20'] = df['TRIN'].rolling(window=5).mean()
+    df.to_clipboard()
