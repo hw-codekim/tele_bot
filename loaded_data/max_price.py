@@ -92,12 +92,16 @@ class Max:
         
 if __name__ == '__main__':
     today = datetime.today().strftime('%Y%m%d')
+<<<<<<< HEAD
     today = '20250502'
+=======
+    today = '20250418'
+>>>>>>> 908195146960da56a46050d7e9f262e9fe453fae
     df = Max.get_52_week_high(today)
     df.to_csv(f'./saved_data/{today}_52주 신고가.csv', encoding='utf-8-sig',index=False)
-    dd = Max.get_gap(today)
-    dd.to_csv(f'./saved_data/{today}_종목별 등락률.csv', encoding='utf-8-sig', index=False)
-    # print(df)
+    # dd = Max.get_gap(today)
+    # dd.to_csv(f'./saved_data/{today}_종목별 등락률.csv', encoding='utf-8-sig', index=False)
+    # # print(df)
     
     
     
