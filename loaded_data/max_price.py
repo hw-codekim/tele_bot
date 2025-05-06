@@ -64,7 +64,7 @@ class Max:
             '2025-09-10', '2025-10-03', '2025-12-25'
         ]
         
-        one_year_ago = (pd.to_datetime(ref_day) - pd.DateOffset(years=1)).strftime('%Y%m%d')
+        one_year_ago = (pd.to_datetime(ref_day) - pd.DateOffset(days=70)).strftime('%Y%m%d')
         biz_days = pd.date_range(start=one_year_ago, end=today, freq=BDay()).strftime('%Y%m%d').tolist()
         krx_holidays_str = [pd.to_datetime(date).strftime('%Y%m%d') for date in krx_holidays]
         biz_days = [day for day in biz_days if day not in krx_holidays_str]
@@ -92,7 +92,7 @@ class Max:
         
 if __name__ == '__main__':
     today = datetime.today().strftime('%Y%m%d')
-    # today = '20250411'
+    today = '20250502'
     df = Max.get_52_week_high(today)
     df.to_csv(f'./saved_data/{today}_52주 신고가.csv', encoding='utf-8-sig',index=False)
     dd = Max.get_gap(today)
