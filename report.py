@@ -61,7 +61,8 @@ class Report:
         df["rate_of_increase"] = ((df["current_target_price"] - df["prevision_target_price"]) / df["prevision_target_price"] * 100).round(2)
         df["rate_of_increase"] = df["rate_of_increase"].replace([np.inf, -np.inf], np.nan)
         # 오늘(1/31) 보고서만 필터링
-        today_df = df[(df["date"] == biz_day) & (df["rate_of_increase"] > 0)].dropna(subset=["prevision_target_price", "rate_of_increase"])
+        # today_df = df[(df["date"] == biz_day) & (df["rate_of_increase"] > 0)].dropna(subset=["prevision_target_price", "rate_of_increase"])
+        today_df = df[(df["date"] == biz_day)].dropna(subset=["prevision_target_price", "rate_of_increase"]) # rate_of_increase 가 0 보다 큰 것만 추출하는걸 뺐음. 전부다 표기
         # print(today_df)
         for _, row in today_df.iterrows():
             today_data.append({

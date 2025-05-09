@@ -64,15 +64,11 @@ class Max:
             '2025-09-10', '2025-10-03', '2025-12-25'
         ]
         
-<<<<<<< HEAD
         one_year_ago = (pd.to_datetime(ref_day) - pd.DateOffset(days=50)).strftime('%Y%m%d')
-=======
-        one_year_ago = (pd.to_datetime(ref_day) - pd.DateOffset(days=70)).strftime('%Y%m%d')
->>>>>>> fd4171c1169891ca4b04b71550986fe39e40d2b0
         biz_days = pd.date_range(start=one_year_ago, end=today, freq=BDay()).strftime('%Y%m%d').tolist()
         krx_holidays_str = [pd.to_datetime(date).strftime('%Y%m%d') for date in krx_holidays]
         biz_days = [day for day in biz_days if day not in krx_holidays_str]
-         
+
         new_data = pd.DataFrame()
         for day in tqdm(biz_days, total=len(biz_days)):
             result = Max.get_price(day)
@@ -96,24 +92,12 @@ class Max:
         
 if __name__ == '__main__':
     today = datetime.today().strftime('%Y%m%d')
-<<<<<<< HEAD
-    today = '20250429'
-
-    # df = Max.get_52_week_high(today)
-    # df.to_csv(f'./saved_data/{today}_52주 신고가.csv', encoding='utf-8-sig',index=False)
-    dd = Max.get_gap(today)
-    dd.to_csv(f'./saved_data/{today}_종목별 등락률.csv', encoding='utf-8-sig', index=False)
-=======
-<<<<<<< HEAD
-    today = '20250502'
-=======
-    today = '20250418'
->>>>>>> 908195146960da56a46050d7e9f262e9fe453fae
+    
+    # today = '20250429'
     df = Max.get_52_week_high(today)
     df.to_csv(f'./saved_data/{today}_52주 신고가.csv', encoding='utf-8-sig',index=False)
-    # dd = Max.get_gap(today)
-    # dd.to_csv(f'./saved_data/{today}_종목별 등락률.csv', encoding='utf-8-sig', index=False)
->>>>>>> fd4171c1169891ca4b04b71550986fe39e40d2b0
+    dd = Max.get_gap(today)
+    dd.to_csv(f'./saved_data/{today}_종목별 등락률.csv', encoding='utf-8-sig', index=False)
     # # print(df)
     
     

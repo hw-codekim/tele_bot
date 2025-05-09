@@ -13,7 +13,7 @@ class Main:
     def daily():
         biz_day = datetime.today().strftime('%Y%m%d')
         gubuns = ['1000', '3000', '3100', '6000', '9000', '8000']
-        period = 120
+        period = 20
 
         
         price_df = pd.DataFrame()

@@ -7,6 +7,8 @@ import numpy as np
 from report import Report
 from biz_day import Bizday
 import json
+from datetime import datetime
+
 
 with open('bot_key.json', 'r') as file:
     data = json.load(file)
@@ -45,13 +47,28 @@ async def send_news_via_telegram(news_list):
 async def send_report_telegram(report):
     try:
         all_reports = ""
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        
+        
         for entry in report:
+            
+            slope_raw = entry['상승률'].strip()
+
+            # 이모지 조건 처리
+            if "-" in slope_raw:
+                slope = f"⬇ {slope_raw}"  # 하락
+            elif slope_raw in ["0%", "0.0%", "0.00%"]:
+                slope = f"➖ {slope_raw}"  # 보합
+            else:
+                slope = f"⬆ {slope_raw}"  # 상승
+            
             all_reports += (
+                f"📅 날짜: {today_str}\n"
                 f"😀 기업명 : {entry['기업명']}\n" +
                 f"*애널리스트 : {entry['애널리스트']}\n" +
                 f"*현재 목표가 : {entry['현재 목표가']}\n" +
                 f"*이전 목표가 : {entry['이전 목표가']}\n" +
-                f"*상승률 : {entry['상승률']}\n" +
+                f"*상승률 : {slope}\n" +
                 f"*제목 : {entry['제목']}\n" +
                 f"*내용 : {entry['내용']}\n" +
                 "-" * 50 + "\n"
@@ -72,7 +89,9 @@ async def send_report_telegram(report):
                 if not message_chunk:
                     print("🚨 분할된 메시지가 비어있음. 루프 종료.")
                     break
-
+                
+                message_with_date = f"📅 날짜: {today_str}\n\n{message_chunk}"
+                
                 # 디버깅 출력 (전송 전)
                 print(f"📩 메시지 전송 (길이: {len(message_chunk)})")
                 await bot.send_message(chat_id=CHAT_ID, text=message_chunk)
@@ -86,6 +105,7 @@ async def send_report_telegram(report):
 
         # 남은 메시지 전송
         if all_reports:
+            message_with_date = f"📅 날짜: {today_str}\n\n{all_reports}"
             await bot.send_message(chat_id=CHAT_ID, text=all_reports)
     except Exception as e:
         print(e)
