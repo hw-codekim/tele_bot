@@ -230,17 +230,19 @@ def add_growth_metrics(df, corp):
 
         df.loc[(corp, f'{metric} YoY'), cols] = yoy_values
         df.loc[(corp, f'{metric} QoQ'), cols] = qoq_values
-
+        
     return df
 
 
 #fs_div : 분기 1(11013),2(11012),3(11014),4(11011)
 if __name__ == '__main__'  :
     # 조회하고 싶은 종목 code 와 corp 변경
-    code = '161890' 
-    corp = '한국콜마'
+    code = '200130' 
+    corp = '콜마비앤에이치'
     dff = get_all_quarter_data(code, corp)
     rst =  extract_pure_4q(dff)
     ab = add_growth_metrics(rst,corp)
+
+    print(ab)
     ab.to_clipboard()  # 클립보드에 복사
     

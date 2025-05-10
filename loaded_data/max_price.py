@@ -93,7 +93,7 @@ class Max:
 if __name__ == '__main__':
     today = datetime.today().strftime('%Y%m%d')
     
-    # today = '20250429'
+    today = '20250509'
     df = Max.get_52_week_high(today)
     df.to_csv(f'./saved_data/{today}_52주 신고가.csv', encoding='utf-8-sig',index=False)
     dd = Max.get_gap(today)
