@@ -258,7 +258,7 @@ if __name__ == '__main__'  :
     
     dd=pd.DataFrame()
     
-    corps = ['대웅제약']
+    corps = ['이엔에프테크놀로지']
     
     for corp in corps:
         code = company_code(corp)

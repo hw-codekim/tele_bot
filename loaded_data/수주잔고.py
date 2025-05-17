@@ -143,7 +143,7 @@ def save_excel(df, filename='./수주잔고/수준잔고.xlsx'):
     print(f"{filename} 저장 완료!")
 
 if __name__ == '__main__':
-    corps = ['산일전기']
+    corps = ['LS마린솔루션','산일전기','이수페타시스']
 
     all_data = pd.DataFrame()
 
