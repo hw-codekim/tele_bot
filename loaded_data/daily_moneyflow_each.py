@@ -93,7 +93,7 @@ class KrxMoney:
                     target_date = unique_dates[selected_date]  # 최신 날짜에서 -1일
                     # target_date = unique_dates[-3]  # 최신 날짜에서 -2일 (원하는 경우)
 
-                    top_20_df = df[(df['구분'] == g) & (df['날짜'] == target_date)].nlargest(20, '거래대금_순매수')
+                    top_20_df = df[(df['구분'] == g) & (df['날짜'] == target_date)].nlargest(30, '거래대금_순매수')
                     merged_df_list.append(top_20_df)
 
                 merged_df = pd.concat(merged_df_list) if merged_df_list else pd.DataFrame()
@@ -147,8 +147,9 @@ def get_price(biz_day):
 
 if __name__ == '__main__':
     biz_day = datetime.today().strftime('%Y%m%d')
+    biz_day = '20250514'
     gubuns = ['1000', '3000', '3100', '6000', '9000', '8000']
-    period = cnt
+    period = 1
 
     df = pd.DataFrame()
 
@@ -164,5 +165,6 @@ if __name__ == '__main__':
             rst_df = KrxMoney.daily_money_flow(target_date, gubun)
             df = pd.concat([df, rst_df]).drop_duplicates(subset=['날짜', '구분', '종목명'], keep='last')
 
-    KrxMoney.save(df)
-    print('Excel 저장 완료!')
+    # KrxMoney.save(df)
+    df.to_clipboard()
+    # print('Excel 저장 완료!')

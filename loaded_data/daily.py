@@ -12,8 +12,9 @@ import pandas as pd
 class Main:
     def daily():
         biz_day = datetime.today().strftime('%Y%m%d')
+        biz_day = '20250512'
         gubuns = ['1000', '3000', '3100', '6000', '9000', '8000']
-        period = 120
+        period = 3
 
         
         price_df = pd.DataFrame()
@@ -26,6 +27,7 @@ class Main:
         for i in tqdm(range(period)):
             start_date = datetime.strptime(biz_day, '%Y%m%d')
             target_date = (start_date - (i * kr_business_day)).strftime('%Y%m%d')
+            print(target_date)
             price_rst_df = Daily_stock_price.price(target_date)
             price_df = pd.concat([price_df, price_rst_df]).drop_duplicates(subset=['기준일','종목명'], keep='last')
         

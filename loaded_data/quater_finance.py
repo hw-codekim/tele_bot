@@ -3,8 +3,8 @@ import pandas as pd
 from datetime import datetime
 import time
 import warnings
-
-
+import requests
+import json
 
 warnings.simplefilter("ignore")
 api_key = '08d5ae18b24d9a11b7fd67fb0d79c607f1c88464'
@@ -16,6 +16,22 @@ today = datetime.today().strftime("%Y%m%d") #오늘
 #corp : 종목이름
 #fs_div : 분기 1(11013),2(11012),3(11014),4(11011)
 #reprt_code : 연결, 개별 ( OFC, CFS)
+
+def company_code(corp_name):
+    # 전 종목 가져오기
+    url = 'https://comp.fnguide.com/XML/Market/CompanyList.txt'
+    res = requests.get(url)
+    res.encoding = 'utf-8-sig'
+    corp_list = json.loads(res.text)['Co']
+    
+    # 회사 이름으로 종목 코드 찾기
+    for item in corp_list:
+        name = item['nm']
+        code = item['cd'][1:]  # 'A005930' → '005930'
+        if name == corp_name:
+            return code
+    
+    return None
 
 def quater_fin(code,corp,year,reprt_code,fs_div='CFS'):
     # try:
@@ -111,12 +127,13 @@ def year_finance(result_df):
     
 def get_all_quarter_data(code, corp):
 
-    years = ['2021', '2022', '2023', '2024', '2025']
+    years = ['2023', '2024', '2025']
     reprt_codes = ['11013', '11012', '11014', '11011']  # 1Q, 반기, 3Q, 사업보고서
 
     result_df = pd.DataFrame()
 
     for year in years:
+        print(f'{year} 조회')
         for reprt_code in reprt_codes:
             for fs_div in ['CFS', 'OFS']:  # 연결 먼저, 없으면 개별
                 try:
@@ -237,12 +254,19 @@ def add_growth_metrics(df, corp):
 #fs_div : 분기 1(11013),2(11012),3(11014),4(11011)
 if __name__ == '__main__'  :
     # 조회하고 싶은 종목 code 와 corp 변경
-    code = '200130' 
-    corp = '콜마비앤에이치'
-    dff = get_all_quarter_data(code, corp)
-    rst =  extract_pure_4q(dff)
-    ab = add_growth_metrics(rst,corp)
+    # code = '200130' 
+    
+    dd=pd.DataFrame()
+    
+    corps = ['대웅제약']
+    
+    for corp in corps:
+        code = company_code(corp)
+        print(f'{corp}의 코드는 {code}')
+        dff = get_all_quarter_data(code, corp)
+        rst =  extract_pure_4q(dff)
+        # ab = add_growth_metrics(rst,corp)
+        dd = pd.concat([dd,rst])
 
-    print(ab)
-    ab.to_clipboard()  # 클립보드에 복사
+    dd.to_clipboard()  # 클립보드에 복사
     
