@@ -10,18 +10,23 @@ from html_table_parser import parser_functions as parser
 import openpyxl
 from openpyxl.utils.dataframe import dataframe_to_rows
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import collections
+import collections.abc
+if not hasattr(collections, 'Callable'):
+    collections.Callable = collections.abc.Callable
 
 api_key = '08d5ae18b24d9a11b7fd67fb0d79c607f1c88464'
 dart = OpenDartReader(api_key)
 # today = (datetime.today()-timedelta(days=1)).strftime("%Y%m%d") #오늘
 today = datetime.today().strftime("%Y%m%d") #오늘
-s_today = '20250206'
-e_today = '20250221'
+s_today = '20250516'
+e_today = '20250516'
 
 dart_list = dart.list(start=s_today,end=e_today)
 
 lists = dart_list[dart_list['report_nm'].str.contains('공급계약체결')&~dart_list['report_nm'].str.contains('기재정정')]
-print(f'{len(lists)}개 조회')
+print(f'{e_today}_{len(lists)}개 조회')
 def supply(rcp_no,corp):
     
     
@@ -66,11 +71,12 @@ for i in range(len(lists)):
         corp = lists['flr_nm'].values[i]
         supply_df = supply(rcp_no,corp)
         print(f'{i}_{corp} 완료')  
+        print(supply_df)
         df = pd.concat([df,supply_df])
     except Exception as e:
         print(f'{corp}',e)
         
-file_name = f'./공급계약/공급계약_종합.xlsx'
+file_name = f'./supply_data/공급계약_종합.xlsx'
 writer = pd.ExcelWriter(file_name, mode='a', engine='openpyxl', if_sheet_exists='overlay')
 df.to_excel(
     writer, 
