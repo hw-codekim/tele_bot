@@ -12,9 +12,9 @@ import pandas as pd
 class Main:
     def daily():
         biz_day = datetime.today().strftime('%Y%m%d')
-        biz_day = '20250512'
+        biz_day = '20250516'
         gubuns = ['1000', '3000', '3100', '6000', '9000', '8000']
-        period = 3
+        period = 120
 
         
         price_df = pd.DataFrame()
