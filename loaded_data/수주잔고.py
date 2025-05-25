@@ -128,7 +128,7 @@ def pivot_backlog(df):
     df_pivot.reset_index(inplace=True)
     return df_pivot
 
-def save_excel(df, filename='./수주잔고/수준잔고.xlsx'):
+def save_excel(df, filename=f'./수주잔고/전선변압기_수준잔고.xlsx'):
     # 폴더 없으면 생성
     os.makedirs(os.path.dirname(filename), exist_ok=True)
 
@@ -143,7 +143,7 @@ def save_excel(df, filename='./수주잔고/수준잔고.xlsx'):
     print(f"{filename} 저장 완료!")
 
 if __name__ == '__main__':
-    corps = ['LS마린솔루션','산일전기','이수페타시스']
+    corps = ['일진전기','산일전기','LS ELECTRIC','LS마린솔루션','가온전선','대한전선','대원전선','효성중공업','HD현대일렉트릭']
 
     all_data = pd.DataFrame()
 
