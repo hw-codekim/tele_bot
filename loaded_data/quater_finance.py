@@ -259,7 +259,7 @@ if __name__ == '__main__'  :
     dd=pd.DataFrame()
     
     corps = [
-    '태웅'
+    'SNT다이내믹스'
     ]
     
     for corp in corps:

@@ -89,8 +89,8 @@ def calculate_rs(stock_df, jisu_df, start_day, end_day):
 
 
 if __name__ == '__main__':
-    start_day = '20250225'
-    end_day = '20250509'
+    start_day = '20250223'
+    end_day = '20250523'
 
     jisu_df = calculate_change(start_day, end_day).reset_index()
     stock_df = calculate_market_cap_change(start_day, end_day)

@@ -48,7 +48,7 @@ async def send_report_telegram(report):
     try:
         all_reports = ""
         today_str = datetime.now().strftime("%Y-%m-%d")
-        
+        # today_str = '2025-05-2'
         
         for entry in report:
             
@@ -116,6 +116,7 @@ async def main():
 
     # news_list = naver_news('스타게이트')  # 뉴스 크롤링
     day = Bizday.biz_day()
+    # day = '20250527'
     report = Report.whynot_report(day)
     print('김')
     await send_report_telegram(report)  # 텔레그램으로 전송

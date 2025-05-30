@@ -12,7 +12,7 @@ import pandas as pd
 class Main:
     def daily():
         biz_day = datetime.today().strftime('%Y%m%d')
-        biz_day = '20250516'
+        # biz_day = '20250521'
         gubuns = ['1000', '3000', '3100', '6000', '9000', '8000']
         period = 120
 
@@ -38,10 +38,12 @@ class Main:
         price_df_pivoted = price_df.pivot_table(index='종목명', columns='기준일', values='시가총액').reset_index()
         
         Daily_stock_price.save(price_df_pivoted)
+        # price_df_pivoted.to_clipboard()
         print('종목별 거래가격 저장 완료!')
         KrxMoney.save(money_df)
         print('종목별 거래대금 저장 완료!')
 
 if __name__ == '__main__'  :
     Main.daily()
+    
 
