@@ -128,6 +128,7 @@ def year_finance(result_df):
 def get_all_quarter_data(code, corp):
 
     years = ['2021','2022', '2023','2024', '2025']
+    # years = ['2025']
     reprt_codes = ['11013', '11012', '11014', '11011']  # 1Q, 반기, 3Q, 사업보고서
 
     result_df = pd.DataFrame()
@@ -259,7 +260,13 @@ if __name__ == '__main__'  :
     dd=pd.DataFrame()
     
     corps = [
-    'SNT다이내믹스'
+    "삼성전자", "SK하이닉스", "DB하이텍", "솔브레인", "한솔케미칼", "동진쎄미켐", "이엔에프테크놀로지", "티씨케이", "하나머티리얼즈", "원익QnC",
+    "월덱스", "비씨엔씨", "케이엔제이", "에스앤에스텍", "에프에스티", "코미코", "한솔아이원스", "HPSP", "주성엔지니어링", "원익IPS",
+    "유진테크", "케이씨텍", "피에스케이", "테스", "브이엠", "파크시스템스", "넥스틴", "오로스테크놀로지", "펨트론", "인텍플러스",
+    "제우스", "와이씨", "하나마이크론", "SFA반도체", "한양디지텍", "두산테스나", "에이팩트", "이수페타시스", "대덕전자", "심텍",
+    "해성디에스", "티엘비", "리노공업", "ISC", "티에스이", "티에프이", "오킨스전자", "마이크로컨텍솔", "샘씨엔에스", "가온칩스",
+    "에이직랜드", "오픈엣지테크놀로지", "코아시아", "에이디테크놀로지", "SKC", "필옵틱스", "제이앤티씨", "켐트로닉스", "와이씨켐", "네오셈",
+    "퀄리타스반도체", "엑시콘", "자람테크놀로지", "신성이엔지", "케이엔솔", "GST"
     ]
     
     for corp in corps:
@@ -270,5 +277,7 @@ if __name__ == '__main__'  :
         # ab = add_growth_metrics(rst,corp)
         dd = pd.concat([dd,rst])
 
-    dd.to_clipboard()  # 클립보드에 복사
-    dd.to_excel(f'실적_{corps}.xlsx')    
+    dd.reset_index(drop=False,inplace=True)
+    dd.sort_values('항목',ascending=False,inplace=True)
+
+    dd.to_excel(f'실적_반도체.xlsx',index=False)    
