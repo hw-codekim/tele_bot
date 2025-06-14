@@ -91,7 +91,7 @@ class Value:
 if __name__ == '__main__':
     day = Bizday.biz_day()
     endDd = day
-    stockName = '유바이오로직스'
+    stockName = 'SK'
     stCode,stockCode = BaseCode.base_info(stockName)
     trading_df = Value.corp_value(endDd,stockName,stCode,stockCode)
     print(trading_df)

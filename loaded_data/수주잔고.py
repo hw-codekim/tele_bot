@@ -143,7 +143,7 @@ def save_excel(df, filename=f'./수주잔고/전선변압기_DB하이텍.xlsx'):
     print(f"{filename} 저장 완료!")
 
 if __name__ == '__main__':
-    corps = ['DB하이텍']
+    corps = ['HPSP']
 
     all_data = pd.DataFrame()
 
