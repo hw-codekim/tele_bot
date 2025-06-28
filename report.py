@@ -145,7 +145,7 @@ if __name__ == '__main__':
     day = Bizday.biz_day()
     name = '원텍'
     
-    names = ['알테오젠']
+    names = ['티엘비']
     
     rst_df = pd.DataFrame()
     for name in names:

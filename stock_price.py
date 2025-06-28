@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
     start_day = '20241230'
     end_day = Bizday.biz_day()
-    # end_day = '20250605'
+    end_day = '20250627'
     mypick_stock = [
     "하이브", "JYP Ent.", "에스엠", "와이지엔터테인먼트", "디어유", "큐브엔터", "노머스", "YG PLUS", "스튜디오드래곤", "디앤씨미디어",
     "CJ ENM", "콘텐트리중앙", "스튜디오미르", "인텔리안테크", "쎄트렉아이", "에이치브이엠", "루미르", "AP위성", "제노코", "컨텍",
@@ -84,7 +84,7 @@ if __name__ == '__main__':
     "세경하이테크", "선익시스템", "유티아이", "덕산네오룩스", "레뷰코퍼레이션", "글로벌텍스프리", "덴티움", "덴티스", "지누스",
     "현대해상", "삼성화재", "DB손해보험", "한화손해보험", "롯데손해보험", "코리안리", "LS증권", "NH투자증권", "SK증권", "교보증권",
     "다올투자증권", "대신증권", "미래에셋증권", "부국증권", "삼성증권", "신영증권", "유안타증권", "한양증권", "키움증권", "한화투자증권",
-    "현대차증권", "DB증권", "CJ", "SK", "코오롱", "LS",'SBS','비츠로셀',
+    "현대차증권", "DB증권", "CJ", "SK", "코오롱", "LS",'SBS','비츠로셀','에스오에스랩'
     ]
 
 
@@ -108,8 +108,8 @@ if __name__ == '__main__':
     
     
     # 금요일 조회시 주석처리 필요 오늘 데이터 추가
-    today_data = Krx_daily_price.daily_price(end_day)
-    weekly_data.append(today_data)
+    # today_data = Krx_daily_price.daily_price(end_day)
+    # weekly_data.append(today_data)
 
     # 데이터프레임 결합
     df = pd.concat(weekly_data, axis=0)

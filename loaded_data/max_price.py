@@ -82,7 +82,7 @@ class Max:
         result['신고가_점수'] = round((result['시가총액_현재'] / result['시가총액_52주최고']) * 100, 1)
         result['비중'] = round((result['거래대금'] / result['시가총액_현재']) * 100, 1)
         result.sort_values(by='비중',ascending=False,inplace=True)
-        result = result[(result['시가총액_현재'] > 2000) & (result['비중'] > 5)& (result['등락률'] >= 0)]
+        result = result[(result['시가총액_현재'] > 2000) & (result['비중'] >= 10)& (result['등락률'] >= 0)]
         # print(result)
 
         return result
@@ -97,11 +97,12 @@ class Max:
 if __name__ == '__main__':
     today = datetime.today().strftime('%Y%m%d')
     
-    # today = '20250605'
-    df = Max.get_52_week_high(today)
-    df.to_csv(f'./saved_data/{today}_52주 신고가.csv', encoding='utf-8-sig',index=False)
-    dd = Max.get_gap(today)
-    dd.to_csv(f'./saved_data/{today}_종목별 등락률.csv', encoding='utf-8-sig', index=False)
+    todays = ['20250616','20250617','20250618','20250619','20250620','20250623','20250624','20250625','20250626','20250627']
+    for today in todays:
+        df = Max.get_52_week_high(today)
+        df.to_csv(f'./saved_data/{today}_52주 신고가.csv', encoding='utf-8-sig',index=False)
+    # dd = Max.get_gap(today)
+    # dd.to_csv(f'./saved_data/{today}_종목별 등락률.csv', encoding='utf-8-sig', index=False)
     # # print(df)
     
     
