@@ -65,8 +65,8 @@ class Value:
 
         # 두 번째 y축 (ROE)
         ax2 = ax1.twinx()
-        ax2.plot(df['일자'], df['ROE'], alpha=0.9, color='r', label='ROE')
-        ax2.set_ylabel("ROE", color='r')
+        ax2.plot(df['일자'], df['선행PER'], alpha=0.9, color='r', label='선행PER')
+        ax2.set_ylabel("선행PER", color='r')
         ax2.tick_params(axis='y', labelcolor='r')
 
         # X축 날짜 가독성 증가
@@ -79,7 +79,7 @@ class Value:
 
 
         # 제목 추가
-        plt.title(f"{stockName}_PBR & ROE")
+        plt.title(f"{stockName}_PBR & PER")
 
         # 범례 추가
         ax1.legend(loc='upper left')
@@ -91,7 +91,7 @@ class Value:
 if __name__ == '__main__':
     day = Bizday.biz_day()
     endDd = day
-    stockName = 'SK'
+    stockName = '심텍'
     stCode,stockCode = BaseCode.base_info(stockName)
     trading_df = Value.corp_value(endDd,stockName,stCode,stockCode)
     print(trading_df)

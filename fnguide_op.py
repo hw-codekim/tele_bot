@@ -81,7 +81,7 @@ def finance_quater_consen(code, name, gubun='D'):
 
 
 
-def save(df, filename=f'종목별_컨센서스_250423.csv'):  # 엑셀 저장 함수
+def save(df, filename=f'종목별_컨센서스_250629.csv'):  # 엑셀 저장 함수
     try:
         if not os.path.exists(filename):
             df.to_csv(filename, mode='w', encoding='utf-8-sig', index=False)
