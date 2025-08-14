@@ -124,7 +124,7 @@ class Daily_stockprice:
 
         
 if __name__ == '__main__':
-    day = '20240305'
+    day = '20250501'
     # dd = Daily_stockprice.get_kospi_kosdaq(day)
     df = Daily_stockprice.get_adr()
     Daily_stockprice.get_graph(df)

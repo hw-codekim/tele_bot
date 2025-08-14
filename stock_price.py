@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import time
 from biz_day import Bizday
-
+from datetime import datetime
 
 class Krx_daily_price:
     def daily_price(biz_day):
@@ -50,10 +50,10 @@ class Krx_daily_price:
         return daily_updown
 
 if __name__ == '__main__':
-
+    today = datetime.today().strftime('%Y%m%d')
     start_day = '20241230'
     end_day = Bizday.biz_day()
-    end_day = '20250627'
+    # end_day = '20250627'
     mypick_stock = [
     "하이브", "JYP Ent.", "에스엠", "와이지엔터테인먼트", "디어유", "큐브엔터", "노머스", "YG PLUS", "스튜디오드래곤", "디앤씨미디어",
     "CJ ENM", "콘텐트리중앙", "스튜디오미르", "인텔리안테크", "쎄트렉아이", "에이치브이엠", "루미르", "AP위성", "제노코", "컨텍",
@@ -108,8 +108,8 @@ if __name__ == '__main__':
     
     
     # 금요일 조회시 주석처리 필요 오늘 데이터 추가
-    # today_data = Krx_daily_price.daily_price(end_day)
-    # weekly_data.append(today_data)
+    today_data = Krx_daily_price.daily_price(end_day)
+    weekly_data.append(today_data)
 
     # 데이터프레임 결합
     df = pd.concat(weekly_data, axis=0)

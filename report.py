@@ -121,9 +121,9 @@ class Report:
             print(f"레포트 파일이 저장되었습니다")
 
     def graph(df,corp_name):
-        df.sort_values(by='날짜',ascending=True,inplace=True)
+        df.sort_values(by='date',ascending=True,inplace=True)
         plt.figure(figsize=(8, 4))
-        plt.plot(df['날짜'], df['목표가'], marker='o', linestyle='-', color='b',markersize=4,linewidth=1)
+        plt.plot(df['date'], df['target_price'], marker='o', linestyle='-', color='b',markersize=4,linewidth=1)
 
         # 제목, 축 레이블 추가
         plt.title(F'[{corp_name}]_Report_Target Price')
@@ -145,7 +145,7 @@ if __name__ == '__main__':
     day = Bizday.biz_day()
     name = '원텍'
     
-    names = ['티엘비']
+    names = ['RFHIC']
     
     rst_df = pd.DataFrame()
     for name in names:
@@ -154,5 +154,5 @@ if __name__ == '__main__':
         rst_df = pd.concat([rst_df,ddf])
         rst_df = rst_df[['date','company_name','analyst_name','target_price','judge','title','description']]
         print(f'{name} 완료')
-    # Report.graph(ddf,name)
+    Report.graph(ddf,name)
     rst_df.to_clipboard()

@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import datetime
 import numpy as np
 import warnings
+from datetime import datetime
 warnings.filterwarnings("ignore")
 
 
@@ -64,11 +65,11 @@ class Report:
 
 # 사용 예시
 if __name__ == "__main__":
-    biz_day = '20250628'  # 오늘 날짜
+    biz_day = datetime.today().strftime('%Y%m%d')
     df = Report.whynot_report_all_rising(biz_day)
 
     # 전체 출력
     print(df.to_string(index=False))
 
     # 엑셀 저장
-    df.to_excel("목표가상승_전체리포트.xlsx", index=False)
+    df.to_excel(f"목표가상승_전체리포트_{biz_day}.xlsx", index=False)

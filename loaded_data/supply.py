@@ -20,8 +20,8 @@ api_key = '08d5ae18b24d9a11b7fd67fb0d79c607f1c88464'
 dart = OpenDartReader(api_key)
 # today = (datetime.today()-timedelta(days=1)).strftime("%Y%m%d") #오늘
 today = datetime.today().strftime("%Y%m%d") #오늘
-s_today = '20250620'
-e_today = '20250625'
+s_today = '20250805'
+e_today = '20250807'
 
 dart_list = dart.list(start=s_today,end=e_today)
 

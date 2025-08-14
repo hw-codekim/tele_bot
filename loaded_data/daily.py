@@ -44,6 +44,9 @@ class Main:
         print('종목별 거래대금 저장 완료!')
 
 if __name__ == '__main__'  :
-    Main.daily()
+    try:
+        Main.daily()
+    except Exception as e:
+        print(e)
     
 
