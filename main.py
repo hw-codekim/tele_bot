@@ -10,13 +10,16 @@ import json
 from datetime import datetime
 
 
-with open('bot_key.json', 'r') as file:
-    data = json.load(file)
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
+CHAT_ID = os.environ.get('CHAT_ID')
 
-BOT_TOKEN = data['BOT_TOKEN']
-CHAT_ID = data['CHAT_ID']
+if not BOT_TOKEN or not CHAT_ID:
+    # 로컬에서 bot_key.json 읽기
+    with open('bot_key.json', 'r') as file:
+        data = json.load(file)
+        BOT_TOKEN = data['BOT_TOKEN']
+        CHAT_ID = data['CHAT_ID']
 
-# Bot 객체 생성
 bot = Bot(token=BOT_TOKEN)
 
 
