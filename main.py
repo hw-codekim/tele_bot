@@ -1,11 +1,6 @@
-import requests
-from bs4 import BeautifulSoup
 import asyncio
 from telegram import Bot
-import pandas as pd
-import numpy as np
 from report import Report
-from biz_day import Bizday
 import json
 from datetime import datetime
 import os
@@ -115,12 +110,10 @@ async def send_report_telegram(report,day):
 # 메인 함수
 async def main():
 
-    # news_list = naver_news('스타게이트')  # 뉴스 크롤링
-    day = Bizday.biz_day()
-    # day = '20251008'
-    report = Report.whynot_report(day)
+    today = datetime.today().strftime('%Y%m%d')
+    report = Report.whynot_report(today)
 
-    await send_report_telegram(report,day)  # 텔레그램으로 전송
+    await send_report_telegram(report,today)  # 텔레그램으로 전송
 
 # 비동기 실행
 if __name__ == "__main__":
