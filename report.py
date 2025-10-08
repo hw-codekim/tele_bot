@@ -66,6 +66,7 @@ class Report:
         # print(today_df)
         for _, row in today_df.iterrows():
             today_data.append({
+                "날짜":row['date'],
                 "기업명": row['company_name'],
                 "애널리스트": row['analyst_name'],
                 "현재 목표가": f"{int(row['current_target_price']):,}원",
