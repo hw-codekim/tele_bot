@@ -10,7 +10,7 @@ import json
 from datetime import datetime
 import os
 
-
+# GitHub Actions에서는 환경변수, 로컬에서는 bot_key.json
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 CHAT_ID = os.environ.get('CHAT_ID')
 
@@ -23,39 +23,36 @@ if not BOT_TOKEN or not CHAT_ID:
 
 bot = Bot(token=BOT_TOKEN)
 
+## =========== 삭제 예정=========
+# with open('bot_key.json', 'r') as file:
+#     data = json.load(file)
+
+# BOT_TOKEN = data['BOT_TOKEN']
+# CHAT_ID = data['CHAT_ID']
+
+# # Bot 객체 생성
+# bot = Bot(token=BOT_TOKEN)
+# ===================
 
 # 네이버 뉴스에서 제목과 링크 크롤링
 
-def naver_news(content):
-    data = []
-    for i in range(3):
-        response = requests.get(f"https://search.naver.com/search.naver?where=news&sm=tab_jum&query={content}&start={i}1")
-        html = response.text
-        soup = BeautifulSoup(html, 'html.parser')
-        articles = soup.select(".list_news > li")
-
-        for article in articles:
-            title = article.select_one(".news_tit").text
-            link = article.select_one(".news_tit").attrs['href']
-            data.append(f"{title}\n{link}")
-    return data 
-
-
-
-# 텔레그램으로 뉴스 보내기
-async def send_news_via_telegram(news_list):
-    for news in news_list:
-        await bot.send_message(chat_id=CHAT_ID, text=news)
-
 #=============== 레포트 상향 =====================
-async def send_report_telegram(report):
+async def send_report_telegram(report,day):
     try:
+        filtered_report = [entry for entry in report if entry['날짜'] == day]
+        
+        if not filtered_report:
+            # 텔레그램으로 "오늘 보고서 없음" 전송
+            await bot.send_message(chat_id=CHAT_ID, text=f"📅 {day} 날짜의 보고서가 없습니다.")
+            print(f"⚠️ {day} 날짜의 보고서 없음")
+            return
+        
+
         all_reports = ""
         today_str = datetime.now().strftime("%Y-%m-%d")
         # today_str = '2025-05-2'
         
         for entry in report:
-            
             slope_raw = entry['상승률'].strip()
 
             # 이모지 조건 처리
@@ -120,10 +117,10 @@ async def main():
 
     # news_list = naver_news('스타게이트')  # 뉴스 크롤링
     day = Bizday.biz_day()
-    # day = '20250527'
+    # day = '20251008'
     report = Report.whynot_report(day)
-    print('김')
-    await send_report_telegram(report)  # 텔레그램으로 전송
+
+    await send_report_telegram(report,day)  # 텔레그램으로 전송
 
 # 비동기 실행
 if __name__ == "__main__":
