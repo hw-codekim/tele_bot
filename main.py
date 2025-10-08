@@ -67,7 +67,7 @@ async def send_report_telegram(report):
                 slope = f"⬆ {slope_raw}"  # 상승
             
             all_reports += (
-                f"📅 날짜: {today_str}\n"
+                f"📅 날짜: {entry['날짜']}\n"
                 f"😀 기업명 : {entry['기업명']}\n" +
                 f"*애널리스트 : {entry['애널리스트']}\n" +
                 f"*현재 목표가 : {entry['현재 목표가']}\n" +
